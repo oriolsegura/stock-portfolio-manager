@@ -2,8 +2,8 @@ package com.oriolsegura.opulentia.service;
 
 import com.oriolsegura.opulentia.dto.auth.LogInDto;
 import com.oriolsegura.opulentia.dto.auth.SignUpDto;
-import com.oriolsegura.opulentia.exception.UserAlreadyExistsException;
-import com.oriolsegura.opulentia.exception.WrongCredentialsException;
+import com.oriolsegura.opulentia.exception.auth.UserAlreadyExistsException;
+import com.oriolsegura.opulentia.exception.auth.WrongCredentialsException;
 import com.oriolsegura.opulentia.mapper.UserMapper;
 import com.oriolsegura.opulentia.model.User;
 import com.oriolsegura.opulentia.repository.UserRepository;
@@ -36,7 +36,7 @@ public class AuthService {
 			user = repository.save(user);
 
 			return tokenService.generateToken(user);
-		} catch (DataIntegrityViolationException ex) {
+		} catch (DataIntegrityViolationException e) {
 			throw new UserAlreadyExistsException();
 		}
 	}

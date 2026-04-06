@@ -1,0 +1,197 @@
+openapi: 3.0.3
+info:
+  title: Opulentia API
+  version: 1.0.0
+  description: Stock portfolio API
+
+servers:
+  - url: http://localhost:8080/api
+
+tags:
+  - name: Authentication
+  - name: Stocks
+  - name: Accounts
+
+security:
+  - BearerAuth: []
+
+paths:
+  /auth/sign-up:
+    post:
+      tags: [Authentication]
+      security: []
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        201:
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        409:
+          description: Username or email already exists
+  /auth/log-in:
+    post:
+      tags: [Authentication]
+      security: []
+      summary: Authenticate user
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: JWT token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+  /api/stocks:
+    get:
+      tags: [Stocks]
+      summary: List available stocks
+      responses:
+        200:
+          description: List of stocks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockList'
+        403:
+          description: Forbidden
+    post:
+      tags: [Stocks]
+      summary: Add a new stock
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                companyName:
+                  type: string
+                  example: Apple Inc.
+                ticker:
+                  type: string
+                  example: AAPL
+                currencyCode:
+                  type: string
+                  example: USD
+      responses:
+        201:
+          description: Stock created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stock'
+        403:
+          description: Forbidden
+        409:
+          description: Stock with the same ticker or company name already exists
+  /api/accounts:
+    get:
+      tags: [Accounts]
+      summary: List user accounts
+      responses:
+        200:
+          description: List of accounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountList'
+        403:
+          description: Forbidden
+    post:
+      tags: [Accounts]
+      summary: Create a new account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                currencyCode:
+                  type: string
+                  example: USD
+      responses:
+        201:
+          description: Account created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        403:
+          description: Forbidden
+        409:
+          description: Account with the same name already exists for the user
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+    Stock:
+      type: object
+      properties:
+        id:
+          type: integer
+        companyName:
+          type: string
+          example: Apple Inc.
+        ticker:
+          type: string
+          example: AAPL
+        currencyCode:
+          type: string
+          example: USD
+    StockList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Stock'
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        balance:
+          type: number
+        currencyCode:
+          type: string
+          example: USD
+    AccountList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Account'

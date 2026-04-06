@@ -31,7 +31,7 @@ public class Stock {
 	@Column(name = "currency_code", length = 3, nullable = false)
 	private String currencyCode;
 
-	@Column(name = "price", precision = 19, scale = 4)
+	@Column(precision = 19, scale = 4)
 	private BigDecimal price;
 
 	@Column(name = "price_updated_at")

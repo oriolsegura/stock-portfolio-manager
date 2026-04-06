@@ -42,6 +42,10 @@ public class User implements UserDetails {
 		return List.of();
 	}
 
+	public Long getId() {
+		return id;
+	}
+
 	@Override
 	@NullMarked
 	public String getUsername() {
