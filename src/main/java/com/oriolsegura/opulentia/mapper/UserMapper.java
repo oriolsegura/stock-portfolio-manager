@@ -1,16 +1,16 @@
 package com.oriolsegura.opulentia.mapper;
 
-import com.oriolsegura.opulentia.dto.auth.SignUpDto;
+import com.oriolsegura.opulentia.request.auth.SignUpRequest;
 import com.oriolsegura.opulentia.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
 
-	public User fromSignUpRequest(SignUpDto data) {
+	public User fromSignUpRequest(SignUpRequest request) {
 		User user = new User();
-		user.setUsername(data.username());
-		user.setEmail(data.email());
+		user.setUsername(request.username());
+		user.setEmail(request.email());
 
 		return user;
 	}

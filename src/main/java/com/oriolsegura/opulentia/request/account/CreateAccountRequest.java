@@ -1,4 +1,4 @@
-package com.oriolsegura.opulentia.dto.account;
+package com.oriolsegura.opulentia.request.account;
 
 import com.oriolsegura.opulentia.validation.currency.ValidCurrencyCode;
 import jakarta.validation.constraints.NotBlank;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public record CreateAccountDto(
+public record CreateAccountRequest(
 		@NotBlank
 		@Size(max = 63)
 		String name,

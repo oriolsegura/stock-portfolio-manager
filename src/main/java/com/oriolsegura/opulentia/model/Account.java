@@ -19,6 +19,9 @@ public class Account {
 	@SequenceGenerator(name = "accounts_id_seq", sequenceName = "accounts_id_seq", allocationSize = 50)
 	private Long id;
 
+	@Version
+	private Long version;
+
 	@NotNull
 	@Column(name = "user_id", nullable = false)
 	private Long userId;
@@ -44,6 +47,14 @@ public class Account {
 		return id;
 	}
 
+	public Long getVersion() {
+		return version;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -61,11 +72,15 @@ public class Account {
 	}
 
 	public void initBalance() {
-		if (this.balance != null) {
+		if (balance != null) {
 			throw new IllegalStateException("Balance is already initialized");
 		}
 
-		this.balance = BigDecimal.ZERO;
+		balance = BigDecimal.ZERO;
+	}
+
+	public void applyMovement(BigDecimal amount) {
+		balance = balance.add(amount);
 	}
 
 	public void setCurrencyCode(String currencyCode) {

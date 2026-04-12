@@ -1,10 +1,9 @@
-package com.oriolsegura.opulentia.validation.currency;
+package com.oriolsegura.opulentia.validation.amount;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.PARAMETER;
@@ -12,10 +11,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({ FIELD, PARAMETER })
 @Retention(RUNTIME)
-@Constraint(validatedBy = CurrencyCodeValidator.class)
-public @interface ValidCurrencyCode {
+@Constraint(validatedBy = NonZeroBigDecimalValidator.class)
+public @interface NonZero {
 
-	String message() default "Invalid currency code";
+	String message() default "Amount must not be zero";
 
 	Class<?>[] groups() default {};
 

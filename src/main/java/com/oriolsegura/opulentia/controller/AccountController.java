@@ -1,10 +1,11 @@
 package com.oriolsegura.opulentia.controller;
 
 import com.oriolsegura.opulentia.dto.account.AccountDto;
-import com.oriolsegura.opulentia.dto.account.CreateAccountDto;
+import com.oriolsegura.opulentia.request.account.CreateAccountRequest;
 import com.oriolsegura.opulentia.mapper.AccountMapper;
 import com.oriolsegura.opulentia.model.Account;
 import com.oriolsegura.opulentia.model.User;
+import com.oriolsegura.opulentia.request.account.CreateCashMovementRequest;
 import com.oriolsegura.opulentia.service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -30,9 +31,9 @@ public class AccountController {
 	@PostMapping
 	public ResponseEntity<AccountDto> createAccount(
 			@AuthenticationPrincipal User user,
-			@RequestBody @Valid CreateAccountDto data
+			@RequestBody @Valid CreateAccountRequest request
 	) {
-		Account account = accountService.createAccount(user, data);
+		Account account = accountService.createAccount(user, request);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(accountMapper.toDto(account));
 	}
@@ -45,6 +46,17 @@ public class AccountController {
 				.toList();
 
 		return ResponseEntity.ok(accounts);
+	}
+
+	@PostMapping("/{accountId}/movements")
+	public ResponseEntity<AccountDto> makeCashMovement(
+			@AuthenticationPrincipal User user,
+			@PathVariable Long accountId,
+			@RequestBody @Valid CreateCashMovementRequest request
+	) {
+		Account account = accountService.makeCashMovement(user, accountId, request);
+
+		return ResponseEntity.ok(accountMapper.toDto(account));
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.oriolsegura.opulentia.dto.auth;
+package com.oriolsegura.opulentia.request.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public record SignUpDto(
+public record SignUpRequest(
 		@NotBlank
 		@Size(max = 31)
 		String username,

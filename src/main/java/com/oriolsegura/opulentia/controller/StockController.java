@@ -1,6 +1,6 @@
 package com.oriolsegura.opulentia.controller;
 
-import com.oriolsegura.opulentia.dto.stock.CreateStockDto;
+import com.oriolsegura.opulentia.request.stock.CreateStockRequest;
 import com.oriolsegura.opulentia.dto.stock.StockDto;
 import com.oriolsegura.opulentia.mapper.StockMapper;
 import com.oriolsegura.opulentia.model.Stock;
@@ -26,8 +26,8 @@ public class StockController {
 	}
 
 	@PostMapping
-	public ResponseEntity<StockDto> create(@RequestBody @Valid CreateStockDto data) {
-		Stock stock = stockService.createStock(data);
+	public ResponseEntity<StockDto> create(@RequestBody @Valid CreateStockRequest request) {
+		Stock stock = stockService.createStock(request);
 		StockDto stockDto = stockMapper.toDto(stock);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(stockDto);

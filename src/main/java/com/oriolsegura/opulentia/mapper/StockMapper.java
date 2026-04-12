@@ -1,6 +1,6 @@
 package com.oriolsegura.opulentia.mapper;
 
-import com.oriolsegura.opulentia.dto.stock.CreateStockDto;
+import com.oriolsegura.opulentia.request.stock.CreateStockRequest;
 import com.oriolsegura.opulentia.dto.stock.StockDto;
 import com.oriolsegura.opulentia.model.Stock;
 import org.springframework.stereotype.Component;
@@ -12,11 +12,11 @@ public class StockMapper {
 		return new StockDto(stock.getId(), stock.getCompanyName(), stock.getTicker(), stock.getCurrencyCode());
 	}
 
-	public Stock fromCreateRequest(CreateStockDto data) {
+	public Stock fromCreateRequest(CreateStockRequest request) {
 		Stock stock = new Stock();
-		stock.setCompanyName(data.companyName());
-		stock.setTicker(data.ticker());
-		stock.setCurrencyCode(data.currencyCode().toUpperCase());
+		stock.setCompanyName(request.companyName());
+		stock.setTicker(request.ticker());
+		stock.setCurrencyCode(request.currencyCode().toUpperCase());
 
 		return stock;
 	}

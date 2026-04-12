@@ -1,8 +1,8 @@
 package com.oriolsegura.opulentia.controller;
 
-import com.oriolsegura.opulentia.dto.auth.LogInDto;
-import com.oriolsegura.opulentia.dto.auth.SignUpDto;
-import com.oriolsegura.opulentia.dto.user.LoginResponseDto;
+import com.oriolsegura.opulentia.request.auth.LogInRequest;
+import com.oriolsegura.opulentia.request.auth.SignUpRequest;
+import com.oriolsegura.opulentia.dto.auth.AuthenticationDto;
 import com.oriolsegura.opulentia.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,17 +22,17 @@ public class AuthController {
 	}
 
 	@PostMapping(value = "/auth/sign-up", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public ResponseEntity<LoginResponseDto> signUp(@ModelAttribute @Valid SignUpDto data) {
-		String token = authService.signUp(data);
+	public ResponseEntity<AuthenticationDto> signUp(@ModelAttribute @Valid SignUpRequest request) {
+		String token = authService.signUp(request);
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(new LoginResponseDto(token));
+		return ResponseEntity.status(HttpStatus.CREATED).body(new AuthenticationDto(token));
 	}
 
 	@PostMapping(value = "/auth/log-in", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public ResponseEntity<LoginResponseDto> logIn(@ModelAttribute @Valid LogInDto data) {
-		String token = authService.logIn(data);
+	public ResponseEntity<AuthenticationDto> logIn(@ModelAttribute @Valid LogInRequest request) {
+		String token = authService.logIn(request);
 
-		return ResponseEntity.ok(new LoginResponseDto(token));
+		return ResponseEntity.ok(new AuthenticationDto(token));
 	}
 
 }

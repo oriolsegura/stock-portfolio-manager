@@ -1,6 +1,6 @@
 package com.oriolsegura.opulentia.service;
 
-import com.oriolsegura.opulentia.dto.stock.CreateStockDto;
+import com.oriolsegura.opulentia.request.stock.CreateStockRequest;
 import com.oriolsegura.opulentia.exception.stock.StockAlreadyExistsException;
 import com.oriolsegura.opulentia.mapper.StockMapper;
 import com.oriolsegura.opulentia.model.Stock;
@@ -22,9 +22,9 @@ public class StockService {
 		this.mapper = mapper;
 	}
 
-	public Stock createStock(CreateStockDto dto) throws StockAlreadyExistsException {
+	public Stock createStock(CreateStockRequest request) throws StockAlreadyExistsException {
 		try {
-			return repository.save(mapper.fromCreateRequest(dto));
+			return repository.save(mapper.fromCreateRequest(request));
 		} catch (DataIntegrityViolationException e) {
 			throw new StockAlreadyExistsException();
 		}
