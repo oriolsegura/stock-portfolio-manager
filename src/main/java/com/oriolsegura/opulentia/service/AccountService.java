@@ -70,7 +70,7 @@ public class AccountService {
 			Long accountId,
 			CreateCashMovementRequest request
 	) throws AccountNotFoundException, AccountNotOwnedException {
-		Account account = repository.findById(accountId)
+		Account account = repository.findByIdForUpdate(accountId)
 				.orElseThrow(() -> new AccountNotFoundException(accountId));
 
 		if (! account.getUserId().equals(user.getId())) {
