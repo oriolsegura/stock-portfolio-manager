@@ -57,6 +57,10 @@ public class Stock {
 		return currencyCode;
 	}
 
+	public BigDecimal getPrice() {
+		return price;
+	}
+
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
@@ -80,6 +84,10 @@ public class Stock {
 
 		this.price = price;
 		this.priceUpdatedAt = priceUpdatedAt;
+	}
+
+	public void setLastPrice(@NotNull BigDecimal price) {
+		setLastPrice(price, LocalDateTime.now());
 	}
 
 	public void setCurrencyCode(String currencyCode) {

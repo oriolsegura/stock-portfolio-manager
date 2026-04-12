@@ -1,4 +1,4 @@
-package com.oriolsegura.opulentia.schedule;
+package com.oriolsegura.opulentia.scheduler;
 
 import com.oriolsegura.opulentia.service.OutboxPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
