@@ -9,7 +9,14 @@ import org.springframework.stereotype.Component;
 public class StockMapper {
 
 	public StockDto toDto(Stock stock) {
-		return new StockDto(stock.getId(), stock.getCompanyName(), stock.getTicker(), stock.getCurrencyCode());
+		return new StockDto(
+				stock.getId(),
+				stock.getCompanyName(),
+				stock.getTicker(),
+				stock.getCurrencyCode(),
+				stock.getPrice(),
+				stock.getPriceUpdatedAt()
+		);
 	}
 
 	public Stock fromCreateRequest(CreateStockRequest request) {

@@ -61,6 +61,10 @@ public class Stock {
 		return price;
 	}
 
+	public LocalDateTime getPriceUpdatedAt() {
+		return priceUpdatedAt;
+	}
+
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
