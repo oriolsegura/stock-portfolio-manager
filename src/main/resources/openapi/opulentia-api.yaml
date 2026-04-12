@@ -148,6 +148,38 @@ paths:
           description: Forbidden
         409:
           description: Account with the same name already exists for the user
+  /api/accounts/{accountId}/movements:
+    post:
+      tags: [Accounts]
+      summary: Create a cash movement (deposit/withdrawal)
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                description:
+                  type: string
+      responses:
+        200:
+          description: Updated account after movement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        403:
+          description: Forbidden
+        404:
+          description: Account not found
 
 components:
   securitySchemes:
@@ -161,6 +193,13 @@ components:
       properties:
         token:
           type: string
+        expiresAt:
+          type: integer
+          description: Epoch time in milliseconds when the token expires
+        tokenType:
+          type: string
+          description: Only Bearer is supported
+          example: Bearer
     Stock:
       type: object
       properties:
@@ -175,6 +214,13 @@ components:
         currencyCode:
           type: string
           example: USD
+        price:
+          type: number
+          nullable: true
+        priceUpdatedAt:
+          type: string
+          nullable: true
+          format: date-time
     StockList:
       type: array
       items:
