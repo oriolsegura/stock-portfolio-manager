@@ -42,11 +42,9 @@ public class AuthService {
 	}
 
 	public String logIn(LogInRequest request) throws WrongCredentialsException {
-		User user = repository.findByUsername(request.username());
-
-		if (user == null || ! encoder.matches(request.password(), user.getPassword())) {
-			throw new WrongCredentialsException();
-		}
+		User user = repository.findByUsername(request.username())
+				.filter(u -> encoder.matches(request.password(), u.getPassword()))
+				.orElseThrow(WrongCredentialsException::new);
 
 		return tokenService.generateToken(user);
 	}
