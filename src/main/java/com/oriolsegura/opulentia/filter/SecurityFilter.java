@@ -1,6 +1,6 @@
 package com.oriolsegura.opulentia.filter;
 
-import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.oriolsegura.opulentia.exception.auth.InvalidTokenException;
 import com.oriolsegura.opulentia.model.User;
 import com.oriolsegura.opulentia.repository.UserRepository;
 import com.oriolsegura.opulentia.service.TokenService;
@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -34,13 +35,18 @@ public class SecurityFilter extends OncePerRequestFilter {
 			@NonNull HttpServletResponse response,
 			@NonNull FilterChain filterChain
 	) throws ServletException, IOException {
-		String token = recoverToken(request);
+		try {
+			String token = recoverToken(request);
 
-		if (token != null) {
-			authenticate(token);
+			if (token != null) {
+				authenticate(token);
+			}
+
+			filterChain.doFilter(request, response);
+		} catch (AuthenticationException e) {
+			SecurityContextHolder.clearContext();
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}
-
-		filterChain.doFilter(request, response);
 	}
 
 	private String recoverToken(HttpServletRequest request) {
@@ -53,17 +59,14 @@ public class SecurityFilter extends OncePerRequestFilter {
 		return authHeader.replace("Bearer ", "");
 	}
 
-	private void authenticate(String token) {
-		try {
-			String username = tokenService.validateToken(token);
+	private void authenticate(String token) throws InvalidTokenException {
+		String username = tokenService.validateToken(token);
 
-			userRepository.findByUsername(username).ifPresent(user -> {
-				var auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-				SecurityContextHolder.getContext().setAuthentication(auth);
-			});
-		} catch (JWTVerificationException ignored) {
-			SecurityContextHolder.clearContext();
-		}
+		User user = userRepository.findByUsername(username)
+				.orElseThrow(InvalidTokenException::new);
+
+		var auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(auth);
 	}
 
 }

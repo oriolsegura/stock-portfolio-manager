@@ -1,7 +1,11 @@
 package com.oriolsegura.opulentia.exception.auth;
 
-public class WrongCredentialsException extends RuntimeException {
+import org.springframework.security.core.AuthenticationException;
 
-	//
+public class WrongCredentialsException extends AuthenticationException {
+
+	public WrongCredentialsException() {
+		super("Wrong credentials");
+	}
 
 }

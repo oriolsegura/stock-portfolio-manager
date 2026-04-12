@@ -23,16 +23,16 @@ public class AuthController {
 
 	@PostMapping(value = "/auth/sign-up", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ResponseEntity<AuthenticationDto> signUp(@ModelAttribute @Valid SignUpRequest request) {
-		String token = authService.signUp(request);
+		AuthenticationDto auth = authService.signUp(request);
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(new AuthenticationDto(token));
+		return ResponseEntity.status(HttpStatus.CREATED).body(auth);
 	}
 
 	@PostMapping(value = "/auth/log-in", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ResponseEntity<AuthenticationDto> logIn(@ModelAttribute @Valid LogInRequest request) {
-		String token = authService.logIn(request);
+		AuthenticationDto auth = authService.logIn(request);
 
-		return ResponseEntity.ok(new AuthenticationDto(token));
+		return ResponseEntity.ok(auth);
 	}
 
 }
