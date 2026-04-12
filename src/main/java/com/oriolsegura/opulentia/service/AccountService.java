@@ -1,5 +1,6 @@
 package com.oriolsegura.opulentia.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.oriolsegura.opulentia.exception.account.AccountNotFoundException;
 import com.oriolsegura.opulentia.exception.account.AccountNotOwnedException;
 import com.oriolsegura.opulentia.exception.account.InsufficientFundsException;
@@ -89,13 +90,19 @@ public class AccountService {
 		CashMovement cashMovement = cashMovementMapper.fromCreateRequest(accountId, request);
 		cashMovementRepository.save(cashMovement);
 
-		OutboxEvent event = OutboxEvent.pending(
-				"ACCOUNT",
-				accountId.toString(),
-				account.getVersion(),
-				"CASH_MOVEMENT_CREATED",
-				cashMovementMapper.toEventJson(cashMovement)
-		);
+		OutboxEvent event = null;
+
+		try {
+			event = OutboxEvent.pending(
+					"ACCOUNT",
+					accountId.toString(),
+					account.getVersion(),
+					"CASH_MOVEMENT_CREATED",
+					cashMovementMapper.toEventJson(cashMovement)
+			);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
 
 		outboxEventRepository.save(event);
 
